@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Exclusivo - Concesionario</title>
+    <style>
+        /* Estética Premium Concesionario (Limpia y Elegante) */
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #222222;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            text-align: center;
+            color: #111111;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            margin-top: 20px;
+            font-size: 1.8rem;
+            font-weight: 300;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 50px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: #cccccc;
+        }
+
+        .img-container {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            background-color: #eeeeee;
+            position: relative;
+        }
+
+        .car-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .card:hover .car-image {
+            transform: scale(1.05);
+        }
+
+        .info {
+            padding: 15px 20px;
+        }
+
+        .title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #111111;
+        }
+
+        .specs {
+            font-size: 0.8rem;
+            color: #666666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .specs span {
+            color: #333333;
+            font-weight: 600;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #111111;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            transition: background 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            background-color: #cc0000;
+        }
+
+        .btn:disabled {
+            background-color: #666666;
+            cursor: not-allowed;
+        }
+
+        /* Ventana Emergente (Modal) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 4px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #999;
+            transition: color 0.3s;
+        }
+
+        .close:hover { color: #111; }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.75rem;
+            color: #555555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            background-color: #fcfcfc;
+            border: 1px solid #dddddd;
+            color: #333333;
+            border-radius: 3px;
+            box-sizing: border-box;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #111111;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Vehículos de Ocasión</h1>
+
+    <div class="grid" id="car-grid">
+        </div>
+
+    <div class="modal" id="form-modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 style="margin-top:0; color:#111; font-size: 1.2rem; text-transform:uppercase;">Solicitar Información</h2>
+            <p id="car-selected-text" style="color:#666; font-size:0.85rem; margin-bottom: 20px;"></p>
+            
+            <form id="lead-form">
+                <input type="hidden" id="hidden_referencia" name="referencia">
+                <input type="hidden" id="hidden_modelo" name="modelo">
+
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
+                </div>
+                <div class="form-group">
+                    <label>Teléfono Móvil</label>
+                    <input type="tel" id="telefono" required placeholder="+34 600 000 000">
+                </div>
+                <div class="form-group">
+                    <label>correo electrónico</label>
+                    <input type="email" id="correo" required placeholder="tu@email.com">
+                </div>
+                <div class="form-group">
+                    <label>¿Entregas coche a cambio?</label>
+                    <select id="coche_cambio">
+                        <option value="No">No</option>
+                        <option value="Sí">Sí</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tipo de pago</label>
+                    <select id="tipo_pago">
+                        <option value="Financiación">Financiación</option>
+                        <option value="Contado">Al Contado</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn" style="margin-top:10px;">Enviar Solicitud</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos (Las referencias REF son internas)
+        const coches = [
+            { ref: "REF-001", nombre: "Porsche 911 Carrera", km: "15.000", motor: "3.0 V6", cv: "385", trans: "PDK", img: "img/porsche-911.jpg" },
+            { ref: "REF-002", nombre: "Mercedes CLA 45 AMG", km: "22.000", motor: "2.0 L4", cv: "421", trans: "Automático", img: "img/mercedes-cla.jpg" },
+            { ref: "REF-003", nombre: "Audi RS Q8", km: "35.000", motor: "4.0 V8", cv: "600", trans: "Tiptronic", img: "img/audi-rsq8.jpg" },
+            { ref: "REF-004", nombre: "BMW M4 Competition", km: "18.000", motor: "3.0 L6", cv: "510", trans: "Steptronic", img: "img/bmw-m4.jpg" },
+            { ref: "REF-005", nombre: "Range Rover Velar", km: "50.000", motor: "2.0 L4", cv: "250", trans: "Automático", img: "img/rangerover-velar.jpg" },
+            { ref: "REF-006", nombre: "Lexus LC 500", km: "28.000", motor: "5.0 V8", cv: "477", trans: "Automático", img: "img/lexus-lc500.jpg" },
+            { ref: "REF-007", nombre: "Alfa Romeo Giulia QV", km: "40.000", motor: "2.9 V6", cv: "510", trans: "Automático", img: "img/alfa-giulia.jpg" },
+            { ref: "REF-008", nombre: "Porsche Macan S", km: "60.000", motor: "3.0 V6", cv: "380", trans: "PDK", img: "img/porsche-macan.jpg" }
+        ];
+
+        // Generar HTML
+        const grid = document.getElementById('car-grid');
+        coches.forEach(coche => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="img-container">
+                    <img src="${coche.img}" alt="${coche.nombre}" class="car-image" onerror="this.parentElement.style.backgroundColor='#eaeaea'; this.style.display='none';">
+                </div>
+                <div class="info">
+                    <div class="title">${coche.nombre}</div>
+                    <div class="specs">
+                        Motor: <span>${coche.motor}</span> (${coche.cv} CV)<br>
+                        Kilometraje: <span>${coche.km} km</span><br>
+                        Caja: <span>${coche.trans}</span>
+                    </div>
+                    <button class="btn" onclick="openModal('${coche.ref}', '${coche.nombre}')">Solicitar Info</button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        // Lógica Modal
+        const modal = document.getElementById('form-modal');
+        
+        function openModal(ref, nombre) {
+            document.getElementById('hidden_referencia').value = ref;
+            document.getElementById('hidden_modelo').value = nombre;
+            document.getElementById('car-selected-text').innerText = "Interés en: " + nombre;
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeModal();
+        });
+
+        // ENVÍO DE DATOS A N8N
+        document.getElementById('lead-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Efecto visual en el botón
+            const btn = this.querySelector('.btn');
+            const textoOriginal = btn.innerText;
+            btn.innerText = "Enviando...";
+            btn.disabled = true;
+            
+            const payload = {
+                referencia: document.getElementById('hidden_referencia').value,
+                modelo: document.getElementById('hidden_modelo').value,
+                nombre: document.getElementById('nombre').value,
+                telefono: document.getElementById('telefono').value,
+                correo_electronico: document.getElementById('correo').value,
+                coche_cambio: document.getElementById('coche_cambio').value,
+                tipo_pago: document.getElementById('tipo_pago').value
+            };
+
+            // Conexión real con tu Webhook
+            fetch('https://yerayagency.app.n8n.cloud/webhook-test/b572f76b-685c-4387-a946-33bcd320747a', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if(response.ok) {
+                    alert("¡Solicitud enviada correctamente al concesionario!");
+                    closeModal();
+                    this.reset();
+                } else {
+                    alert("⚠️ Error: Asegúrate de que n8n esté escuchando el evento de prueba.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Hubo un problema de conexión al enviar los datos.");
+            })
+            .finally(() => {
+                btn.innerText = textoOriginal;
+                btn.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
