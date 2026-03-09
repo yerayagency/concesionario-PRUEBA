@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Exclusivo - Concesionario</title>
     <style>
-        /* Estética Premium Concesionario (Limpia y Elegante) */
+        /* Estética Premium Concesionario */
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             background-color: #f4f4f4;
@@ -128,10 +128,13 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .modal.open {
             display: flex;
+            opacity: 1;
         }
 
         .modal-content {
@@ -142,6 +145,12 @@
             max-width: 400px;
             position: relative;
             box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.open .modal-content {
+            transform: scale(1);
         }
 
         .close {
@@ -187,6 +196,72 @@
             border-color: #111111;
         }
 
+        /* ANIMACIÓN DE ÉXITO AL ENVIAR */
+        .success-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 0;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .success-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #2e7d32;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+            animation: popIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .success-icon svg {
+            width: 30px;
+            height: 30px;
+            fill: none;
+            stroke: white;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: strokeDraw 0.6s 0.3s forwards;
+        }
+
+        .success-title {
+            color: #111;
+            font-size: 1.2rem;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .success-text {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes strokeDraw {
+            100% { stroke-dashoffset: 0; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
     </style>
 </head>
 <body>
@@ -199,46 +274,60 @@
     <div class="modal" id="form-modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h2 style="margin-top:0; color:#111; font-size: 1.2rem; text-transform:uppercase;">Solicitar Información</h2>
-            <p id="car-selected-text" style="color:#666; font-size:0.85rem; margin-bottom: 20px;"></p>
             
-            <form id="lead-form">
-                <input type="hidden" id="hidden_referencia" name="referencia">
-                <input type="hidden" id="hidden_modelo" name="modelo">
+            <div id="form-container">
+                <h2 style="margin-top:0; color:#111; font-size: 1.2rem; text-transform:uppercase;">Solicitar Información</h2>
+                <p id="car-selected-text" style="color:#666; font-size:0.85rem; margin-bottom: 20px;"></p>
+                
+                <form id="lead-form">
+                    <input type="hidden" id="hidden_referencia" name="referencia">
+                    <input type="hidden" id="hidden_modelo" name="modelo">
 
-                <div class="form-group">
-                    <label>Nombre Completo</label>
-                    <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
+                    <div class="form-group">
+                        <label>Nombre Completo</label>
+                        <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono Móvil</label>
+                        <input type="tel" id="telefono" required placeholder="+34 600 000 000">
+                    </div>
+                    <div class="form-group">
+                        <label>correo electrónico</label>
+                        <input type="email" id="correo" required placeholder="tu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>¿Entregas coche a cambio?</label>
+                        <select id="coche_cambio">
+                            <option value="No">No</option>
+                            <option value="Sí">Sí</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de pago</label>
+                        <select id="tipo_pago">
+                            <option value="Financiación">Financiación</option>
+                            <option value="Contado">Al Contado</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn" style="margin-top:10px;">Enviar Solicitud</button>
+                </form>
+            </div>
+
+            <div id="success-container" class="success-container">
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M5 13l4 4L19 7"></path>
+                    </svg>
                 </div>
-                <div class="form-group">
-                    <label>Teléfono Móvil</label>
-                    <input type="tel" id="telefono" required placeholder="+34 600 000 000">
-                </div>
-                <div class="form-group">
-                    <label>correo electrónico</label>
-                    <input type="email" id="correo" required placeholder="tu@email.com">
-                </div>
-                <div class="form-group">
-                    <label>¿Entregas coche a cambio?</label>
-                    <select id="coche_cambio">
-                        <option value="No">No</option>
-                        <option value="Sí">Sí</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Tipo de pago</label>
-                    <select id="tipo_pago">
-                        <option value="Financiación">Financiación</option>
-                        <option value="Contado">Al Contado</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn" style="margin-top:10px;">Enviar Solicitud</button>
-            </form>
+                <h3 class="success-title">¡Solicitud Enviada!</h3>
+                <p class="success-text">Un comercial se pondrá en contacto contigo en breve.</p>
+            </div>
+
         </div>
     </div>
 
     <script>
-        // Base de datos (Las referencias REF son internas)
+        // Base de datos
         const coches = [
             { ref: "REF-001", nombre: "Porsche 911 Carrera", km: "15.000", motor: "3.0 V6", cv: "385", trans: "PDK", img: "img/porsche-911.jpg" },
             { ref: "REF-002", nombre: "Mercedes CLA 45 AMG", km: "22.000", motor: "2.0 L4", cv: "421", trans: "Automático", img: "img/mercedes-cla.jpg" },
@@ -272,13 +361,20 @@
             grid.appendChild(card);
         });
 
-        // Lógica Modal
+        // Lógica Modal y UI
         const modal = document.getElementById('form-modal');
+        const formContainer = document.getElementById('form-container');
+        const successContainer = document.getElementById('success-container');
         
         function openModal(ref, nombre) {
             document.getElementById('hidden_referencia').value = ref;
             document.getElementById('hidden_modelo').value = nombre;
             document.getElementById('car-selected-text').innerText = "Interés en: " + nombre;
+            
+            // Asegurarnos de que se ve el formulario y no el check de éxito
+            formContainer.style.display = 'block';
+            successContainer.style.display = 'none';
+            
             modal.classList.add('open');
             document.body.style.overflow = 'hidden';
         }
@@ -286,6 +382,10 @@
         function closeModal() {
             modal.classList.remove('open');
             document.body.style.overflow = 'auto';
+            // Pequeño retraso para vaciar el formulario cuando ya no se ve
+            setTimeout(() => {
+                document.getElementById('lead-form').reset();
+            }, 300);
         }
 
         modal.addEventListener('click', function(e) {
@@ -296,10 +396,9 @@
         document.getElementById('lead-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Efecto visual en el botón
             const btn = this.querySelector('.btn');
             const textoOriginal = btn.innerText;
-            btn.innerText = "Enviando...";
+            btn.innerText = "Procesando...";
             btn.disabled = true;
             
             const payload = {
@@ -312,21 +411,23 @@
                 tipo_pago: document.getElementById('tipo_pago').value
             };
 
-            // Conexión real con tu Webhook
             fetch('https://yerayagency.app.n8n.cloud/webhook-test/b572f76b-685c-4387-a946-33bcd320747a', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             })
             .then(response => {
                 if(response.ok) {
-                    alert("¡Solicitud enviada correctamente al concesionario!");
-                    closeModal();
-                    this.reset();
+                    // Ocultamos formulario, mostramos animación de éxito
+                    formContainer.style.display = 'none';
+                    successContainer.style.display = 'flex';
+                    
+                    // Cerramos el modal solos después de 3 segundos
+                    setTimeout(() => {
+                        closeModal();
+                    }, 3000);
                 } else {
-                    alert("⚠️ Error: Asegúrate de que n8n esté escuchando el evento de prueba.");
+                    alert("⚠️ Error: Activa el nodo en n8n para escuchar el evento de prueba.");
                 }
             })
             .catch(error => {
