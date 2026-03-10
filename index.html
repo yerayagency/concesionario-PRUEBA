@@ -2,106 +2,93 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Stock Exclusivo | Unidades Limitadas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Exclusivo - Concesionario Premium</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         /* =========================================
-           RESET Y ENTORNO MOBILE-FIRST
+           ESTILOS BASE PREMIUM
            ========================================= */
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #000000; /* Fondo oscuro exterior */
-            color: #111;
-            /* Centrar como si fuera un móvil en pantallas grandes */
-            display: flex;
-            justify-content: center;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 480px; /* Ancho típico de móvil */
             background-color: #f8f9fa;
-            min-height: 100vh;
-            position: relative;
-            box-shadow: 0 0 40px rgba(0,0,0,0.5);
-            overflow-x: hidden;
+            color: #111111;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* =========================================
-           HEADER Y BARRA DE URGENCIA
+           CABECERA (HEADER)
            ========================================= */
-        .urgency-bar {
-            background-color: #e53935;
-            color: white;
-            text-align: center;
-            padding: 8px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
         .header {
-            padding: 20px;
+            background-color: #000000;
+            color: #ffffff;
+            padding: 60px 20px;
             text-align: center;
-            background: white;
-            border-bottom: 1px solid #eee;
+            border-bottom: 4px solid #cc0000;
         }
 
         .header h1 {
-            font-size: 1.4rem;
-            font-weight: 800;
+            font-size: 2.2rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: -0.5px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
         }
-        
+
         .trust-badge {
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 5px;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 5px;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #aaaaaa;
+            background: rgba(255,255,255,0.1);
+            padding: 6px 16px;
+            border-radius: 20px;
+            margin-top: 10px;
         }
 
         /* =========================================
-           FEED DE COCHES (Estilo Instagram)
+           CUADRÍCULA DE COCHES (GRID)
            ========================================= */
-        .feed {
-            padding-bottom: 80px;
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 50px 20px;
         }
 
-        .post {
-            background: white;
-            margin-bottom: 15px;
-            opacity: 0; /* Para animación de scroll */
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
         }
 
-        .post.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #eaeaea;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Imágenes formato retrato (4:5) para ocupar pantalla */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            border-color: #dddddd;
+        }
+
+        /* Contenedor de imagen 3:2 panorámico */
         .img-container {
             width: 100%;
-            aspect-ratio: 4 / 5;
+            aspect-ratio: 3 / 2;
             background-color: #eeeeee;
             position: relative;
             overflow: hidden;
@@ -111,251 +98,221 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.5s ease;
         }
 
-        .badge-limited {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            backdrop-filter: blur(5px);
+        .card:hover .car-image {
+            transform: scale(1.05);
         }
 
-        .post-info {
-            padding: 20px;
-        }
-
-        .post-header {
+        /* Detalles del coche */
+        .info {
+            padding: 25px 20px;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
+            flex-direction: column;
+            flex-grow: 1;
         }
 
         .title {
-            font-size: 1.3rem;
-            font-weight: 800;
-            line-height: 1.2;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 15px;
+            line-height: 1.3;
         }
-
-        .reviews {
-            color: #f5b301;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-        
-        .reviews span { color: #666; font-weight: 600; margin-left: 5px; }
 
         .specs-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin: 15px 0;
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 12px;
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
         .spec-item {
             font-size: 0.85rem;
-            color: #444;
+            color: #555555;
             display: flex;
             align-items: center;
             gap: 8px;
+            background: #f4f4f4;
+            padding: 8px 10px;
+            border-radius: 4px;
             font-weight: 600;
         }
 
-        .spec-item i { color: #888; width: 16px; text-align: center; }
-
-        .btn-cta {
-            width: 100%;
-            background-color: #000000;
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: transform 0.1s, background-color 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        .spec-item i {
+            color: #cc0000;
+            width: 14px;
+            text-align: center;
         }
 
-        .btn-cta:active { transform: scale(0.97); }
+        .btn {
+            margin-top: auto;
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #cc0000;
+        }
 
         /* =========================================
-           BOTTOM SHEET MODAL (Estilo App)
+           VENTANA EMERGENTE (MODAL)
            ========================================= */
-        .modal-overlay {
+        .modal {
+            display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            z-index: 999;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
             opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
+            transition: opacity 0.3s ease;
         }
 
-        .modal-overlay.open { opacity: 1; visibility: visible; }
+        .modal.open {
+            display: flex;
+            opacity: 1;
+        }
 
-        .bottom-sheet {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%) translateY(100%);
-            width: 100%;
-            max-width: 480px;
-            background: #ffffff;
-            border-radius: 24px 24px 0 0;
-            padding: 25px 25px 40px 25px;
-            z-index: 1000;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1);
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+        .modal-content {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 450px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
             max-height: 90vh;
             overflow-y: auto;
         }
 
-        .modal-overlay.open + .bottom-sheet {
-            transform: translateX(-50%) translateY(0);
+        .modal.open .modal-content {
+            transform: translateY(0);
         }
 
-        .drag-handle {
-            width: 40px;
-            height: 5px;
-            background: #ddd;
-            border-radius: 10px;
-            margin: 0 auto 20px auto;
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #aaaaaa;
+            transition: color 0.3s;
+            background: none;
+            border: none;
         }
 
-        .sheet-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .close:hover { color: #000000; }
+
+        /* Formulario */
+        .form-group {
             margin-bottom: 20px;
         }
 
-        .sheet-header h2 { font-size: 1.3rem; font-weight: 800; }
-        
-        .close-btn {
-            background: #f0f0f0;
-            border: none;
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: #555;
-        }
-
-        /* Formularios optimizados para pulgar */
-        .form-group { margin-bottom: 18px; }
-        
         label {
             display: block;
             margin-bottom: 8px;
-            font-size: 0.85rem;
-            color: #555;
-            font-weight: 600;
+            font-size: 0.8rem;
+            color: #333333;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
         }
 
         input, select {
             width: 100%;
-            padding: 16px;
-            background-color: #f8f9fa;
+            padding: 14px;
+            background-color: #f9f9f9;
             border: 1px solid #e0e0e0;
-            color: #111;
-            border-radius: 12px;
+            color: #111111;
+            border-radius: 4px;
+            box-sizing: border-box;
             font-size: 1rem;
             font-family: inherit;
-            appearance: none;
-            transition: border-color 0.2s;
+            transition: border-color 0.3s;
         }
 
         input:focus, select:focus {
             outline: none;
-            border-color: #000;
-            background-color: #fff;
+            border-color: #000000;
+            background-color: #ffffff;
         }
 
-        select {
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat;
-            background-position: right 15px top 50%;
-            background-size: 12px auto;
-        }
-
-        /* ANIMACIÓN DE ÉXITO */
+        /* =========================================
+           ANIMACIÓN DE ÉXITO
+           ========================================= */
         .success-container {
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 40px 0;
+            padding: 30px 0;
             text-align: center;
         }
 
         .success-icon {
-            width: 70px; height: 70px;
+            width: 70px;
+            height: 70px;
             background-color: #10b981;
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin-bottom: 20px;
             color: white;
             font-size: 30px;
-            animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes bounceIn {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+        /* =========================================
+           RESPONSIVE MÓVIL
+           ========================================= */
+        @media (max-width: 768px) {
+            .header { padding: 40px 20px; }
+            .header h1 { font-size: 1.8rem; }
+            .grid { grid-template-columns: 1fr; }
+            .modal-content { padding: 30px 20px; }
         }
 
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        
-        <div class="urgency-bar">
-            <i class="fa-solid fa-fire"></i> Demanda Alta - Stock limitado
+    <header class="header">
+        <h1>Vehículos de Ocasión Premium</h1>
+        <div class="trust-badge">
+            <i class="fa-solid fa-shield-check"></i> Garantía y verificación por el cliente
         </div>
+    </header>
 
-        <header class="header">
-            <h1>Stock Premium</h1>
-            <div class="trust-badge">
-                <i class="fa-solid fa-shield-check" style="color:#10b981;"></i> Vehículos verificados por el cliente
+    <div class="container">
+        <div class="grid" id="car-grid">
             </div>
-        </header>
+    </div>
 
-        <div class="feed" id="car-grid">
-            </div>
-
-        <div class="modal-overlay" id="overlay" onclick="closeModal()"></div>
-        <div class="bottom-sheet" id="bottom-sheet">
-            <div class="drag-handle"></div>
+    <div class="modal" id="form-modal">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
             
             <div id="form-container">
-                <div class="sheet-header">
-                    <h2>Solicitar Oferta</h2>
-                    <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-                
-                <p id="car-selected-text" style="color:#666; font-size:0.9rem; margin-bottom: 20px; font-weight:600;"></p>
+                <h2 style="margin-top:0; color:#000; font-size: 1.4rem; text-transform:uppercase; font-weight:800;">Solicitar Información</h2>
+                <p id="car-selected-text" style="color:#666; font-size:0.9rem; margin-bottom: 25px; border-left: 3px solid #cc0000; padding-left: 10px;"></p>
                 
                 <form id="lead-form">
                     <input type="hidden" id="hidden_referencia" name="referencia">
@@ -376,124 +333,101 @@
                     <div class="form-group">
                         <label>¿Entregas coche a cambio?</label>
                         <select id="coche_cambio">
-                            <option value="No">No, no entrego coche</option>
-                            <option value="Sí">Sí, quiero tasación</option>
+                            <option value="No">No</option>
+                            <option value="Sí">Sí, solicitar tasación</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Método de pago preferido</label>
                         <select id="tipo_pago">
-                            <option value="Financiación">Financiación a medida</option>
-                            <option value="Contado">Pago al contado</option>
+                            <option value="Financiación">Financiación</option>
+                            <option value="Contado">Al Contado</option>
                         </select>
                     </div>
-                    
-                    <button type="submit" class="btn-cta" style="margin-top:20px;">
-                        <span>Verificar Disponibilidad</span> <i class="fa-solid fa-arrow-right"></i>
-                    </button>
+                    <button type="submit" class="btn" style="margin-top:10px;">Enviar Solicitud</button>
                 </form>
             </div>
 
             <div id="success-container" class="success-container">
                 <div class="success-icon"><i class="fa-solid fa-check"></i></div>
-                <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 10px;">¡Solicitud Registrada!</h3>
-                <p style="color: #666; font-size: 0.95rem;">Un asesor local te contactará en breve para confirmarte los detalles.</p>
+                <h3 style="font-size: 1.4rem; font-weight: 800; color: #000; margin-bottom: 10px;">¡Solicitud Registrada!</h3>
+                <p style="color: #666; font-size: 0.95rem;">El equipo de ventas contactará contigo en breve para informarte sobre este vehículo.</p>
             </div>
         </div>
-
     </div>
 
     <script>
-        // Base de datos (Simulada)
+        // Base de datos restaurada con tus rutas originales
         const coches = [
-            { ref: "REF-001", nombre: "Porsche 911 Carrera", km: "15.000", motor: "3.0 V6", cv: "385", trans: "PDK", img: "https://images.unsplash.com/photo-1503376712344-7043328e3427?auto=format&fit=crop&q=80&w=800" },
-            { ref: "REF-002", nombre: "Mercedes CLA 45 AMG", km: "22.000", motor: "2.0 L4", cv: "421", trans: "Automático", img: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=800" },
-            { ref: "REF-003", nombre: "Audi RS Q8", km: "35.000", motor: "4.0 V8", cv: "600", trans: "Tiptronic", img: "https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?auto=format&fit=crop&q=80&w=800" },
-            { ref: "REF-004", nombre: "BMW M4 Competition", km: "18.000", motor: "3.0 L6", cv: "510", trans: "Steptronic", img: "https://images.unsplash.com/photo-1617531653332-bd46c24f2068?auto=format&fit=crop&q=80&w=800" }
+            { ref: "REF-001", nombre: "Porsche 911 Carrera", km: "15.000", motor: "3.0 V6", cv: "385", trans: "PDK", img: "img/porsche-911.jpg" },
+            { ref: "REF-002", nombre: "Mercedes CLA 45 AMG", km: "22.000", motor: "2.0 L4", cv: "421", trans: "Automático", img: "img/mercedes-cla.jpg" },
+            { ref: "REF-003", nombre: "Audi RS Q8", km: "35.000", motor: "4.0 V8", cv: "600", trans: "Tiptronic", img: "img/audi-rsq8.jpg" },
+            { ref: "REF-004", nombre: "BMW M4 Competition", km: "18.000", motor: "3.0 L6", cv: "510", trans: "Steptronic", img: "img/bmw-m4.jpg" },
+            { ref: "REF-005", nombre: "Range Rover Velar", km: "50.000", motor: "2.0 L4", cv: "250", trans: "Automático", img: "img/rangerover-velar.jpg" },
+            { ref: "REF-006", nombre: "Lexus LC 500", km: "28.000", motor: "5.0 V8", cv: "477", trans: "Automático", img: "img/lexus-lc500.jpg" },
+            { ref: "REF-007", nombre: "Alfa Romeo Giulia QV", km: "40.000", motor: "2.9 V6", cv: "510", trans: "Automático", img: "img/alfa-giulia.jpg" },
+            { ref: "REF-008", nombre: "Porsche Macan S", km: "60.000", motor: "3.0 V6", cv: "380", trans: "PDK", img: "img/porsche-macan.jpg" }
         ];
 
+        // Renderizar la cuadrícula
         const grid = document.getElementById('car-grid');
         
-        // Generar Posts tipo Instagram
         coches.forEach(coche => {
-            const card = document.createElement('article');
-            card.className = 'post';
+            const card = document.createElement('div');
+            card.className = 'card';
             card.innerHTML = `
                 <div class="img-container">
-                    <div class="badge-limited">Solo 1 unidad</div>
-                    <img src="${coche.img}" alt="${coche.nombre}" class="car-image">
+                    <img src="${coche.img}" alt="${coche.nombre}" class="car-image" onerror="this.parentElement.style.backgroundColor='#eaeaea'; this.style.display='none'; this.parentElement.innerHTML+='<div style=position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#888;font-size:0.9rem;><i class=\\'fa-solid fa-image\\'></i> Foto pendiente</div>';">
                 </div>
-                <div class="post-info">
-                    <div class="post-header">
-                        <div class="title">${coche.nombre}</div>
-                    </div>
-                    <div class="reviews">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
-                        <span>(4.9/5 Excelencia)</span>
-                    </div>
+                <div class="info">
+                    <div class="title">${coche.nombre}</div>
                     <div class="specs-grid">
                         <div class="spec-item"><i class="fa-solid fa-gauge-high"></i> ${coche.cv} CV</div>
                         <div class="spec-item"><i class="fa-solid fa-road"></i> ${coche.km} km</div>
                         <div class="spec-item"><i class="fa-solid fa-gear"></i> ${coche.trans}</div>
                         <div class="spec-item"><i class="fa-solid fa-engine"></i> ${coche.motor}</div>
                     </div>
-                    <button class="btn-cta" onclick="openModal('${coche.ref}', '${coche.nombre}')">
-                        Me Interesa
-                    </button>
+                    <button class="btn" onclick="openModal('${coche.ref}', '${coche.nombre}')">Solicitar Información</button>
                 </div>
             `;
             grid.appendChild(card);
         });
 
-        // --------------------------------------------------------
-        // ANIMACIÓN DE SCROLL (Lazy Load effect)
-        // --------------------------------------------------------
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.post').forEach(post => {
-            observer.observe(post);
-        });
-
-        // --------------------------------------------------------
-        // LÓGICA DEL BOTTOM SHEET (Modal)
-        // --------------------------------------------------------
-        const overlay = document.getElementById('overlay');
+        // Lógica Modal
+        const modal = document.getElementById('form-modal');
         const formContainer = document.getElementById('form-container');
         const successContainer = document.getElementById('success-container');
 
         function openModal(ref, nombre) {
             document.getElementById('hidden_referencia').value = ref;
             document.getElementById('hidden_modelo').value = nombre;
-            document.getElementById('car-selected-text').innerHTML = `Has seleccionado: <span style="color:#000;">${nombre}</span>`;
+            document.getElementById('car-selected-text').innerHTML = `<strong>${nombre}</strong>`;
             
             formContainer.style.display = 'block';
             successContainer.style.display = 'none';
             
-            overlay.classList.add('open');
-            document.body.style.overflow = 'hidden'; // Bloquea el scroll del fondo
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
-            overlay.classList.remove('open');
+            modal.classList.remove('open');
             document.body.style.overflow = 'auto';
             setTimeout(() => document.getElementById('lead-form').reset(), 300);
         }
 
-        // --------------------------------------------------------
-        // ENVÍO AL WEBHOOK DE N8N
-        // --------------------------------------------------------
+        // Cierra al hacer clic fuera del modal
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeModal();
+        });
+
+        // Envío a n8n
         document.getElementById('lead-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const btn = this.querySelector('.btn-cta');
-            const textoOriginal = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Procesando...';
+            const btn = this.querySelector('.btn');
+            const textoOriginal = btn.innerText;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando...';
             btn.disabled = true;
             
             const payload = {
@@ -520,7 +454,10 @@
                     alert("⚠️ Error de conexión con el sistema.");
                 }
             })
-            .catch(error => console.error('Error:', error))
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Hubo un problema de red.");
+            })
             .finally(() => {
                 btn.innerHTML = textoOriginal;
                 btn.disabled = false;
