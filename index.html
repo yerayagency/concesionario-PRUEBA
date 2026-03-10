@@ -7,6 +7,9 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
     <style>
         /* =========================================
@@ -85,7 +88,6 @@
             border-color: #dddddd;
         }
 
-        /* Contenedor de imagen 3:2 panorámico */
         .img-container {
             width: 100%;
             aspect-ratio: 3 / 2;
@@ -105,7 +107,6 @@
             transform: scale(1.05);
         }
 
-        /* Detalles del coche */
         .info {
             padding: 25px 20px;
             display: flex;
@@ -255,6 +256,16 @@
             background-color: #ffffff;
         }
 
+        /* Ajustes específicos para el selector de país */
+        .iti { 
+            width: 100%; 
+            display: block; 
+        }
+        .iti__flag {background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/img/flags.png");}
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .iti__flag {background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/img/flags@2x.png");}
+        }
+
         /* =========================================
            ANIMACIÓN DE ÉXITO
            ========================================= */
@@ -322,10 +333,12 @@
                         <label>Nombre Completo</label>
                         <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
                     </div>
+                    
                     <div class="form-group">
                         <label>Teléfono Móvil</label>
-                        <input type="tel" id="telefono" required placeholder="+34 600 000 000">
+                        <input type="tel" id="telefono" required>
                     </div>
+
                     <div class="form-group">
                         <label>correo electrónico</label>
                         <input type="email" id="correo" required placeholder="tu@email.com">
@@ -357,7 +370,7 @@
     </div>
 
     <script>
-        // Base de datos restaurada con tus rutas originales
+        // Base de datos de coches
         const coches = [
             { ref: "REF-001", nombre: "Porsche 911 Carrera", km: "15.000", motor: "3.0 V6", cv: "385", trans: "PDK", img: "img/porsche-911.jpg" },
             { ref: "REF-002", nombre: "Mercedes CLA 45 AMG", km: "22.000", motor: "2.0 L4", cv: "421", trans: "Automático", img: "img/mercedes-cla.jpg" },
@@ -393,7 +406,19 @@
             grid.appendChild(card);
         });
 
+        // ==========================================
+        // INICIALIZAR EL SELECTOR DE PAÍSES
+        // ==========================================
+        const phoneInputField = document.querySelector("#telefono");
+        const phoneInput = window.intlTelInput(phoneInputField, {
+            initialCountry: "es", // Por defecto España
+            preferredCountries: ["es", "fr", "de", "gb", "us", "mx"], // Países que salen arriba del todo
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        });
+
+        // ==========================================
         // Lógica Modal
+        // ==========================================
         const modal = document.getElementById('form-modal');
         const formContainer = document.getElementById('form-container');
         const successContainer = document.getElementById('success-container');
@@ -416,12 +441,13 @@
             setTimeout(() => document.getElementById('lead-form').reset(), 300);
         }
 
-        // Cierra al hacer clic fuera del modal
         modal.addEventListener('click', function(e) {
             if (e.target === modal) closeModal();
         });
 
+        // ==========================================
         // Envío a n8n
+        // ==========================================
         document.getElementById('lead-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -430,11 +456,14 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando...';
             btn.disabled = true;
             
+            // Aquí extraemos el número COMPLETO con el prefijo incluido
+            const numeroInternacional = phoneInput.getNumber();
+
             const payload = {
                 referencia: document.getElementById('hidden_referencia').value,
                 modelo: document.getElementById('hidden_modelo').value,
                 nombre: document.getElementById('nombre').value,
-                telefono: document.getElementById('telefono').value,
+                telefono: numeroInternacional, // Usamos el número procesado por la librería
                 correo_electronico: document.getElementById('correo').value,
                 coche_cambio: document.getElementById('coche_cambio').value,
                 tipo_pago: document.getElementById('tipo_pago').value
