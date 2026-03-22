@@ -343,20 +343,7 @@
                         <label>correo electrónico</label>
                         <input type="email" id="correo" required placeholder="tu@email.com">
                     </div>
-                    <div class="form-group">
-                        <label>¿Entregas coche a cambio?</label>
-                        <select id="coche_cambio">
-                            <option value="No">No</option>
-                            <option value="Sí">Sí</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Método de pago preferido</label>
-                        <select id="tipo_pago">
-                            <option value="Financiación">Financiación</option>
-                            <option value="Contado">Al Contado</option>
-                        </select>
-                    </div>
+
                     <button type="submit" class="btn" style="margin-top:10px;">Enviar Solicitud</button>
                 </form>
             </div>
@@ -464,9 +451,7 @@
                 modelo: document.getElementById('hidden_modelo').value,
                 nombre: document.getElementById('nombre').value,
                 telefono: numeroInternacional, // Usamos el número procesado por la librería
-                correo_electronico: document.getElementById('correo').value,
-                coche_cambio: document.getElementById('coche_cambio').value,
-                tipo_pago: document.getElementById('tipo_pago').value
+                correo_electronico: document.getElementById('correo').value
             };
 
             fetch('https://yerayagency.app.n8n.cloud/webhook/b572f76b-685c-4387-a946-33bcd320747a', {
